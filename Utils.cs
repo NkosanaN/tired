@@ -12,7 +12,7 @@ namespace MovieApiV
 
         public Utils()
         {
-            con = new SqlConnection("data source =NKOSANA-LT; database=Users; integrated security =SSPI;");
+            con = new SqlConnection("data source =LOYD-DELL-G3-LT; database=CarInventory; integrated security =SSPI;");
             con.Open();
         }
         public DataTable Select(string sql)
@@ -30,7 +30,7 @@ namespace MovieApiV
             dt = new DataTable();
             adp.Fill(dt);
 
-            if (dt.Rows.Count > 0)
+            if (dt.Rows[0][0].ToString() == "ok")
                 flag = true;
 
             return flag;
