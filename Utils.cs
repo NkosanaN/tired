@@ -30,7 +30,7 @@ namespace MovieApiV
             dt = new DataTable();
             adp.Fill(dt);
 
-            if (dt.Rows.Count > 0)
+            if (dt.Rows[0][0].ToString() == "ok")
                 flag = true;
 
             return flag;
