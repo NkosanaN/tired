@@ -14,17 +14,17 @@ namespace MovieApiV.Services
         {
             return new Part
             {
-                PartId = (int)row["CarId"],
-                Name = row["Make"].ToString(),
+                PartCode = row["PartCode"].ToString(),
+                PartName = row["PartName"].ToString(),
                 Price = (decimal)row["Price"],
-                Manufacture = row["Color"].ToString(),
-                Year = (int)row["Year"],
+                Manufacture = row["ManufactureCode"].ToString(),
+                Year = (DateTime)row["Year"],
                 Model = row["Model"].ToString()
             };
         }
         public async Task<List<Part>> PartListGet()
         {
-            var sql = "selct * from Part ";
+            var sql = "select * from CarParts ";
 
             var dt = Util.Select(sql);
             var list = new List<Part>();

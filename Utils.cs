@@ -12,7 +12,7 @@ namespace MovieApiV
 
         public Utils()
         {
-            con = new SqlConnection("data source =NKOSANA-LT; database=Users; integrated security =SSPI;");
+            con = new SqlConnection("data source =LOYD-DELL-G3-LT; database=CarInventory; integrated security =SSPI;");
             con.Open();
         }
         public DataTable Select(string sql)

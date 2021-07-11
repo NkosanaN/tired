@@ -13,19 +13,21 @@ namespace MovieApiV.Services
         private Car GetCarFromDataRow(DataRow row) 
         {
             return new Car
-            {
-                CarId = (int)row["CarId"],
-                Make = row["Make"].ToString(),
+            {   
+                CarCode = row["CarCode"].ToString().Trim(),
+                ManufactureCode = row["ManufactureCode"].ToString().Trim(),
+                ModelCode = row["ModelCode"].ToString().Trim(),
+                CatCode = row["CatCode"].ToString().Trim(),
                 Price = (decimal)row["Price"],
-                Color = row["Color"].ToString(),
                 Mileage = (decimal)row["Mileage"],
-                Year = (int)row["Year"],
-                Model = row["Model"].ToString()
+                DateAcquired = (DateTime)row["DateAcquired"],
+                ReqistationYear = (DateTime)row["ReqistationYear"],
+                CarDescription = row["CarDescription"].ToString().Trim(),
             };
         }
         public async Task<List<Car>> CarListGet()
         {
-            var sql = "exec sp_car_data 0 ";
+            var sql = "exec sp_car @Mode=1 ";
 
             var dt = Util.Select(sql);
             var list = new List<Car>();
@@ -36,10 +38,9 @@ namespace MovieApiV.Services
             }
             return list;
         }
-        public async Task<Car> CarGetSingle(int Id)
+        public async Task<Car> CarGetSingle(string carcode)
         {
-            var sql = $"exec sp_movie_data 1, @id={Id}";
-
+            var sql = $"exec sp_car @Mode=2, @CarCode={carcode}";
             var dt = Util.Select(sql);
             if (dt.Rows.Count == 0)
             {
@@ -48,18 +49,24 @@ namespace MovieApiV.Services
             var r = GetCarFromDataRow(dt.Rows[0]);
             return r;
         }
-        public bool AddCar(Car data)
+        public async Task<bool> CarDelete(string carcode)
         {
-            //var sql = $"exec sp_users_process 0 , @Title='{data.Title}',@Genre = '{data.Genre}'";
-            //return Util.Execute(sql);
-            return true;
-        }
-        //must test this one
-        public bool DeleteCar(int Id)
-        {
-            var sql = $"exec sp_movie_data 2 @id={Id}";
+            var sql = $"exec sp_car @Mode=3,@CarCode={carcode}";
             return Util.Execute(sql);
         }
 
+        public async Task<bool> CarAddUpdate(Car data, int mode)
+        {
+            var sql = $"exec sp_car @Mode={mode},@CarCode='{data.CarCode}',@ManufactureCode='{ data.ManufactureCode}'," +
+                $"@ModelCode='{ data.ModelCode}',@CatCode='{ data.CatCode}',@Price={ data.Price},@Mileage={ data.Mileage},@DateAcquired={ data.DateAcquired}," +
+                $"@ReqistationYear={ data.ReqistationYear},@CarDescription='{ data.CarDescription}',@Color='{ data.Color}',@ImagePicture=null";
+            return Util.Execute(sql);
+        }
+
+        public async Task<bool> Payment(string type, string model,string customer)
+        {
+            var sql = $"exec sp_transaction_process @Mode=0,@PaymentType='{type}',@CarModel='{model}',@Approve=0";
+            return Util.Execute(sql);
+        }
     }
 }
