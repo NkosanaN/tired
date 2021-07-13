@@ -23,6 +23,8 @@ namespace MovieApiV.Services
                 DateAcquired = (DateTime)row["DateAcquired"],
                 ReqistationYear = (DateTime)row["ReqistationYear"],
                 CarDescription = row["CarDescription"].ToString().Trim(),
+                ImagePicture = (byte[])row["Image"],
+                ImagePath = (string)row["ImagePath"],
             };
         }
         public async Task<List<Car>> CarListGet()
@@ -57,9 +59,12 @@ namespace MovieApiV.Services
 
         public async Task<bool> CarAddUpdate(Car data, int mode)
         {
+
+            data.ImagePicture = data.ImagePicture == null ? new byte[0] : data.ImagePicture;
+            var i = "0x" + BitConverter.ToString(data.ImagePicture).Replace("-", "");
             var sql = $"exec sp_car @Mode={mode},@CarCode='{data.CarCode}',@ManufactureCode='{ data.ManufactureCode}'," +
-                $"@ModelCode='{ data.ModelCode}',@CatCode='{ data.CatCode}',@Price={ data.Price},@Mileage={ data.Mileage},@DateAcquired={ data.DateAcquired}," +
-                $"@ReqistationYear={ data.ReqistationYear},@CarDescription='{ data.CarDescription}',@Color='{ data.Color}',@ImagePicture=null";
+                $"@ModelCode='{ data.ModelCode}',@CatCode='{ data.CatCode}',@Price={ data.Price},@Mileage={ data.Mileage},@DateAcquired='{ data.DateAcquired}'," +
+                $"@ReqistationYear='{ data.ReqistationYear}',@CarDescription='{ data.CarDescription}',@Color='{ data.Color}',@Image={i},@ImagePath='{data.ImagePath}'";
             return Util.Execute(sql);
         }
 

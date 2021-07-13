@@ -16,7 +16,7 @@ namespace MovieApiV.Model
 
         [Display(Name = "Reserve Date")]
         public DateTime Revdate { get; set; }
-        [Display(Name = "Completed")]
+        [Display(Name = "Status")]
         public bool hasCome { get; set; }
     }
 }

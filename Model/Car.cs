@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,7 +16,11 @@ namespace MovieApiV.Model
         public DateTime DateAcquired { get; set; }
         public DateTime ReqistationYear { get; set; }
         public string CarDescription { get; set; }
-        public string ImagePicture { get; set; }
         public string Color { get; set; }
+        public byte[] ImagePicture { get; set; }
+
+        public IFormFile Image { get; set; }
+        public string ImagePath { get; set; }
+
     }
 }
