@@ -51,9 +51,10 @@ namespace MovieApiV.Services
 
         public async Task<bool> CheckOut(CheckOut data)
         {
-            var sql = $"exec sp_carsold @Mode=4,@CarSoldCode='{data.CarSoldCode}',@CarCode='{ data.CarCode}'," +
-                $"@CustomerCode='{ data.CustomerCode}',@AgreedPrice={ data.AgreedPrice},@DateSold='{ data.DateSold}'," +
-                $"@MonthlyPaymentAmount={ data.MonthlyPaymentAmount},@MonthlyPaymentDate='{ data.MonthlyPaymentDate}',@Details={ data.Details}";
+            var sql = $"exec sp_checkout @Mode=4,@ItemCode='{data.ItemCode}',@PaymentType='{data.Customer}'," +
+                $"@PayDate='{data.PayDate}',@Price='{data.Price}',@Description='{data.Description}'," +
+                $"@Customer='{data.Customer}',@Paid='{data.Paid}'";
+            
             return Util.Execute(sql);
         }
 

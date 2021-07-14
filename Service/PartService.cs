@@ -41,16 +41,32 @@ namespace MovieApiV.Services
 
         public async Task<bool> PartDelete(string code)
         {
-            var sql = $"exec sp_carpart @Mode=3,@CarCode={code}";
+            var sql = $"exec sp_carpart @Mode=3,@PartCode={code}";
+            return Util.Execute(sql);
+        }
+
+        public async Task<bool> DeletePicture(string code)
+        {
+            var sql = $"exec sp_carpart @Mode=6,@PartCode={code}";
             return Util.Execute(sql);
         }
 
         public async Task<bool> PartAddUpdate(Part data, int mode)
         {
-            data.ImagePicture = data.ImagePicture == null ? new byte[0] : data.ImagePicture;
-            var i = "0x" + BitConverter.ToString(data.ImagePicture).Replace("-", "");
-            var sql = $"exec sp_carpart @Mode={mode},@PartCode='{data.PartCode}',@PartName='{data.PartCode}'," +
-            $"@Price='{data.Price}',@ManufactureCode='{data.Manufacture}',@Model='{data.Model}',@Year='{ data.Year}',@Image={ i},@ImagePath='{data.ImagePath}'";
+            string image = string.Empty;
+            if (data.ImagePicture == null)
+            {
+                image = "0x";
+            }
+            else
+            {
+                image = "0x" + BitConverter.ToString(data.ImagePicture).Replace("-", "");
+            }
+            
+           
+            var sql = $"exec sp_carpart @Mode={mode},@PartCode='{data.PartCode}',@PartName='{data.PartName}'," +
+            $"@Price='{data.Price}',@ManufactureCode='{data.Manufacture}',@Model='{data.Model}',@Year='{ data.Year}'," +
+            $"@Image={ image},@ImagePath='{data.ImagePath}'";
             return Util.Execute(sql);
         }
     }

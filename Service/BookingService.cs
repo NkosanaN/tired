@@ -24,7 +24,7 @@ namespace MovieApiV.Services
         }
         public async Task<List<Bookings>> BookingListGet()
         {
-            var sql = "exec sp_booking_data 0 ";
+            var sql = "exec sp_booking_data @Mode=0  ";
 
             var dt = Util.Select(sql);
             var list = new List<Bookings>();
@@ -37,7 +37,7 @@ namespace MovieApiV.Services
         }
         public async Task<Bookings> BookingGetSingle(int Id)
         {
-            var sql = $"exec sp_booking_data 1, @id={Id}";
+            var sql = $"exec sp_booking_data @Mode=1, @id={Id}";
 
             var dt = Util.Select(sql);
             if (dt.Rows.Count == 0)
@@ -49,12 +49,12 @@ namespace MovieApiV.Services
         }
         public async Task<bool> AddBooking(Bookings data)
         {
-            var sql = $"exec sp_booking_process 0 , @TestingCarName='{data.TestingCarName}',@CustName = '{data.CustName}', @Revdate = '{data.Revdate}', @hasCome ='{data.hasCome}' ";
+            var sql = $"exec sp_booking_process @Mode=0  , @TestingCarName='{data.TestingCarName}',@CustName = '{data.CustName}', @Revdate = '{data.Revdate}', @hasCome ='{data.hasCome}' ";
             return Util.Execute(sql);
         }
         public async Task<bool> UpdateBooking(Bookings data, int selectedCust)
         {
-            var sql = $"exec sp_booking_process 1 , " +
+            var sql = $"exec sp_booking_process @Mode=2 , " +
                 $"@TestingCarName='{data.TestingCarName}'," +
                 $"@CustName = '{data.CustName}', " +
                 $"@CustomerId = '{data.CustomerId}'," +
@@ -64,7 +64,7 @@ namespace MovieApiV.Services
         }
         public async Task<bool> DeleteBooking(int Id)
         {
-            var sql = $"exec sp_booking_data 2 @id={Id}";
+            var sql = $"exec sp_booking_data @Mode=2, @id={Id}";
             return Util.Execute(sql);
         }
     }
